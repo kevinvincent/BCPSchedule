@@ -17,7 +17,7 @@ class SetSchedule: UIViewController {
     @IBOutlet var c6: UITextField!
     @IBOutlet var c7: UITextField!
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewWillAppear(animated: Bool) {
         var error: NSError?
         var data: String = String(NSUserDefaults.standardUserDefaults().objectForKey("classlist")! as String)
         var AsArray = JSONParseArray(data)

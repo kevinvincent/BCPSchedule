@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>8C24018D-7DDC-4AA9-ABD2-A1B065E56726</string>
+	<key>IDESourceControlProjectName</key>
+	<string>BCP Schedule</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>EDF3932B1A16298CA63F7009DBEFEE90AF215D1B</key>
+		<string>https://github.com/kevinvincent/BCPSchedule.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>BCP Schedule.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>EDF3932B1A16298CA63F7009DBEFEE90AF215D1B</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/kevinvincent/BCPSchedule.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>EDF3932B1A16298CA63F7009DBEFEE90AF215D1B</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>EDF3932B1A16298CA63F7009DBEFEE90AF215D1B</string>
+			<key>IDESourceControlWCCName</key>
+			<string>BCP%20Schedule</string>
+		</dict>
+	</array>
+</dict>
+</plist>
