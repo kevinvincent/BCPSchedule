@@ -12,8 +12,9 @@ import UIKit
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var weekDayLabel: UILabel!
     @IBOutlet var tableView: UITableView!
+    @IBOutlet weak var Title: UINavigationBar!
     
-    var myList:[String] = ["asd", "dsa", "derp"];
+    var myList:[String] = ["Loading..."];
     
     
     override func viewDidLoad() {
@@ -22,6 +23,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     override func viewWillAppear(animated: Bool) {
         println(NSUserDefaults.standardUserDefaults().objectForKey("classlist"))
+        //Uncomment next line to clear user data
+        //NSUserDefaults.standardUserDefaults().setObject("[]", forKey: "classlist")
+        
+        if (NSUserDefaults.standardUserDefaults().objectForKey("classlist") == nil) {
+            NSUserDefaults.standardUserDefaults().setObject("[\"\", \"\", \"\", \"\", \"\", \"\", \"\"]", forKey: "classlist")
+        }
+
         getData();
         updateDay();
     }
@@ -58,20 +66,31 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let url = NSURL(string: "http://desolate-beach-1823.herokuapp.com/")
         let request = NSURLRequest(URL: url!)
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
+            if (error != nil){
+                var alert:UIAlertView = UIAlertView(title: "Error", message: "Contact a developer", delegate: nil, cancelButtonTitle: "Okay", otherButtonTitles:"")
+            }
             var data:String = NSString(data: data, encoding: NSUTF8StringEncoding)!
+            
             var dataAsArray:[String] = data.componentsSeparatedByString("-");
+            
+            
             
             var cdata: String = String(NSUserDefaults.standardUserDefaults().objectForKey("classlist")! as String)
             var classArray = self.JSONParseArray(cdata)
-            
             for (var i = 0; i < dataAsArray.count; i++) {
-                var period = dataAsArray[i]
-                period = "\(period) - \(classArray[period.toInt()! - 1])"
-                dataAsArray[i] = period
+                //"\(dataAsArray[i]) - \(classArray[dataAsArray[i].toInt()! - 1])"
+                if (dataAsArray[i] != "H" && dataAsArray[i] != "A" && dataAsArray[i] != "E"){
+                    dataAsArray[i] = "\(classArray[dataAsArray[i].toInt()! - 1])"
+                }
+                if (dataAsArray[i] == "H"){
+                    dataAsArray[i] = "Homeroom"
+                }
+                
             }
             
             self.myList = dataAsArray;
             self.tableView.reloadData();
+            self.Title.topItem?.title = data;
         }
     }
     

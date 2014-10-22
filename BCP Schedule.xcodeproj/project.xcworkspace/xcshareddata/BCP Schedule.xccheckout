@@ -5,7 +5,7 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>8C24018D-7DDC-4AA9-ABD2-A1B065E56726</string>
+	<string>74942729-81FD-48A0-8E91-D32A902B9EDC</string>
 	<key>IDESourceControlProjectName</key>
 	<string>BCP Schedule</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
@@ -34,7 +34,7 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>EDF3932B1A16298CA63F7009DBEFEE90AF215D1B</string>
 			<key>IDESourceControlWCCName</key>
-			<string>BCP%20Schedule</string>
+			<string>BCPSchedule</string>
 		</dict>
 	</array>
 </dict>
