@@ -11,14 +11,21 @@ import UIKit
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var weekDayLabel: UILabel!
+    @IBOutlet var dateLabel: UILabel!
     @IBOutlet var tableView: UITableView!
     @IBOutlet weak var Title: UINavigationBar!
     
     var myList:[String] = ["Loading..."];
     
+    var refreshControl:UIRefreshControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.refreshControl = UIRefreshControl()
+        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refersh")
+        self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
+        self.tableView.addSubview(refreshControl)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -39,6 +46,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Dispose of any resources that can be recreated.
     }
     
+    func refresh(sender:AnyObject)
+    {
+        getData();
+        updateDay();
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return myList.count;
     }
@@ -56,10 +69,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func updateDay(){
         let date = NSDate()
         let calendar = NSCalendar.currentCalendar()
-        let components = calendar.components(.CalendarUnitWeekday, fromDate: date)
+        let components = calendar.components(.CalendarUnitWeekday | .CalendarUnitDay | .CalendarUnitMonth, fromDate: date);
         let weekdayIndex = components.weekday
         var listOfDays:[String] = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
         weekDayLabel.text = listOfDays[weekdayIndex-1];
+        dateLabel.text = "\(components.month) / \(components.day)"
     }
     
     func getData(){
@@ -91,6 +105,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.myList = dataAsArray;
             self.tableView.reloadData();
             self.Title.topItem?.title = data;
+            
+            self.refreshControl.endRefreshing()
         }
     }
     
