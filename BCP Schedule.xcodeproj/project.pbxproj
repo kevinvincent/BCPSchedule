@@ -409,6 +409,7 @@
 				0AEE896E19F7579600679EA4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0AEE896F19F7579600679EA4 /* Build configuration list for PBXNativeTarget "BCP ScheduleTests" */ = {
 			isa = XCConfigurationList;
@@ -417,6 +418,7 @@
 				0AEE897119F7579600679EA4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
