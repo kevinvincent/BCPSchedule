@@ -22,14 +22,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Setup Pull to Refresh
         self.refreshControl = UIRefreshControl()
         self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refersh")
         self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.addSubview(refreshControl)
+        
+        //Animate in labels
+        animateIn()
     }
     
     override func viewWillAppear(animated: Bool) {
         println(NSUserDefaults.standardUserDefaults().objectForKey("classlist"))
+        
         //Uncomment next line to clear user data
         //NSUserDefaults.standardUserDefaults().setObject("[]", forKey: "classlist")
         
@@ -64,6 +69,58 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
         
+    }
+    
+    func animateIn() {
+        //get frame
+        var weekdayFrame = self.weekDayLabel.frame;
+        
+        //save the original x for later
+        var weekdayOriginalX = weekdayFrame.origin.x;
+        
+        //move it to the right 10
+        weekdayFrame.origin.x += 20;
+        weekDayLabel.frame = weekdayFrame
+        
+        //make it transparent
+        weekDayLabel.alpha = 0.0;
+        
+        //Animate it it back
+        UIView.animateWithDuration(1.00,
+            
+            animations: {
+                self.weekDayLabel.alpha = 1.0;
+                weekdayFrame.origin.x = weekdayOriginalX;
+                self.weekDayLabel.frame = weekdayFrame;
+            },
+            completion: {
+                (value: Bool) in
+                println(">>> Weekday Animation Complete")
+            }
+        )
+        
+        //Rinse and repeat with Date Label
+        var dateFrame = dateLabel.frame;
+        
+        var dateOriginalX = dateFrame.origin.x;
+        
+        dateFrame.origin.y += 10;
+        dateLabel.frame = dateFrame
+        
+        dateLabel.alpha = 0.0;
+        
+        UIView.animateWithDuration(1.00,
+            
+            animations: {
+                self.dateLabel.alpha = 1.0;
+                dateFrame.origin.y = dateOriginalX;
+                self.dateLabel.frame = dateFrame;
+            },
+            completion: {
+                (value: Bool) in
+                println(">>> Date Animation Complete")
+            }
+        )
     }
     
     func updateDay(){
