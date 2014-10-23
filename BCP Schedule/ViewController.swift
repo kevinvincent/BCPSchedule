@@ -15,6 +15,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet var tableView: UITableView!
     @IBOutlet weak var Title: UINavigationBar!
     
+    //class list
     var myList:[String] = ["Loading..."];
     
     var refreshControl:UIRefreshControl!
@@ -63,6 +64,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell: UITableViewCell = UITableViewCell();
+        //Tell the table to have the correct number of rows ready
         cell.textLabel.text = myList[indexPath.row]
         return cell;
     }
@@ -124,34 +126,52 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func updateDay(){
+        //All of this code just gets the date
         let date = NSDate()
         let calendar = NSCalendar.currentCalendar()
         let components = calendar.components(.CalendarUnitWeekday | .CalendarUnitDay | .CalendarUnitMonth, fromDate: date);
         let weekdayIndex = components.weekday
         var listOfDays:[String] = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
+        
+        //Display the day of the week
         weekDayLabel.text = listOfDays[weekdayIndex-1];
+        
+        //Dispay the date nicely above it
         dateLabel.text = "\(components.month) / \(components.day)"
     }
     
     func getData(){
+        //Where we get the schedule from
         let url = NSURL(string: "http://desolate-beach-1823.herokuapp.com/")
         let request = NSURLRequest(URL: url!)
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
+            
+            //If there is an error, make a popup
             if (error != nil){
-                var alert:UIAlertView = UIAlertView(title: "Error", message: "Contact a developer", delegate: nil, cancelButtonTitle: "Okay", otherButtonTitles:"")
+                var alert = UIAlertController(title: "Error", message: "Contact A Developer", preferredStyle: UIAlertControllerStyle.Alert)
+                self.presentViewController(alert, animated: true, completion: nil)
             }
+            
+            //Get data from server as string
             var data:String = NSString(data: data, encoding: NSUTF8StringEncoding)!
             
+            //Make that data an array
             var dataAsArray:[String] = data.componentsSeparatedByString("-");
             
-            
-            
+            //Get class list from stored data
             var cdata: String = String(NSUserDefaults.standardUserDefaults().objectForKey("classlist")! as String)
+            
+            //Parse the classlist
             var classArray = self.JSONParseArray(cdata)
+            
+            //Basically just references both arrays and overrites one of them to what the displayed table should say
             for (var i = 0; i < dataAsArray.count; i++) {
-                //"\(dataAsArray[i]) - \(classArray[dataAsArray[i].toInt()! - 1])"
                 if (dataAsArray[i] != "H" && dataAsArray[i] != "A" && dataAsArray[i] != "E"){
-                    dataAsArray[i] = "\(classArray[dataAsArray[i].toInt()! - 1])"
+                    if (classArray[dataAsArray[i].toInt()! - 1] as NSString != ""){
+                        dataAsArray[i] = "\(classArray[dataAsArray[i].toInt()! - 1])"
+                    } else {
+                        dataAsArray[i] = "Period \(dataAsArray[i])"
+                    }
                 }
                 if (dataAsArray[i] == "H"){
                     dataAsArray[i] = "Homeroom"
@@ -159,14 +179,20 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 
             }
             
+            //Set list to the one we were messing with in this part of the code
             self.myList = dataAsArray;
+            
+            //Tell the table to refresh with the new data we got
             self.tableView.reloadData();
+            
+            //Set title
             self.Title.topItem?.title = data;
             
             self.refreshControl.endRefreshing()
         }
     }
     
+    //Got from internetz
     func JSONParseArray(jsonString: String) -> [AnyObject] {
         if let data = jsonString.dataUsingEncoding(NSUTF8StringEncoding) {
             if let array = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions(0), error: nil)  as? [AnyObject] {
