@@ -153,7 +153,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         //Show or hide today buton if the day is or isnt today
         if (dayOffset != 0){
-            UIView.animateWithDuration(0.2,
+            self.TodayButton.alpha = 1.0;
+            /*UIView.animateWithDuration(0.2,
                 
                 animations: {
                     self.TodayButton.alpha = 1.0;
@@ -162,9 +163,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     (value: Bool) in
                     println(" Today Button animated in")
                 }
-            )
+            )*/
         } else {
-            UIView.animateWithDuration(0.2,
+            self.TodayButton.alpha = 0.0;
+            /*UIView.animateWithDuration(0.2,
                 
                 animations: {
                     self.TodayButton.alpha = 0.0;
@@ -173,7 +175,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     (value: Bool) in
                     println(" Today Button animated out")
                 }
-            )
+            )*/
         }
         //All of this code just gets the date based on offset
         let date:NSDate = NSCalendar.currentCalendar().dateByAddingComponents(dayOffset.days, toDate: NSDate(), options: NSCalendarOptions(0))!
@@ -242,8 +244,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     @IBAction func JumpToToday(sender: AnyObject) {
-        dayOffset = 0;
-        refresh("derp")
+        var pseudoRecognizer:UISwipeGestureRecognizer = UISwipeGestureRecognizer()
+        
+        if (dayOffset > 0){
+            pseudoRecognizer.direction = UISwipeGestureRecognizerDirection.Right
+            dayOffset = 1;
+            SwipeAction(pseudoRecognizer)
+        } else if (dayOffset < 0){
+            pseudoRecognizer.direction = UISwipeGestureRecognizerDirection.Left
+            dayOffset = -1;
+            SwipeAction(pseudoRecognizer)
+        } else {
+            refresh("derp")
+        }
     }
     func SwipeAction(sender: AnyObject) {
         var dur:NSTimeInterval = 0.2;
