@@ -8,6 +8,8 @@
 
 
 import UIKit
+import MessageUI
+
 
 //Nifty extension for day addition
 extension Int {
@@ -19,7 +21,7 @@ extension Int {
 }
 
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate {
     @IBOutlet weak var TodayButton: UIButton!
     @IBOutlet var weekDayLabel: UILabel!
     @IBOutlet var dateLabel: UILabel!
@@ -38,6 +40,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         //Hide today button
         self.TodayButton.alpha = 0.0;
@@ -58,21 +61,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     override func viewWillAppear(animated: Bool) {
-        
-        //---------------------------------------------------//
-        //Responsive Layouting Based on Different IOS Devices//
-        //---------------------------------------------------//
-        var width = self.view.frame.size.width;
-        var height = self.view.frame.size.height;
-        
-        //Set title width to screen width
-        //Title.frame.size.width = width
-        
-        //Set img width to screen width
-        
-        
-        
-        println(NSUserDefaults.standardUserDefaults().objectForKey("classlist"))
         
         //Uncomment next line to clear user data
         //NSUserDefaults.standardUserDefaults().setObject("[]", forKey: "classlist")
@@ -136,7 +124,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             },
             completion: {
                 (value: Bool) in
-                println(">>> Weekday Animation Complete")
+                //Weekday Animation Complete
             }
         )
         
@@ -159,7 +147,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             },
             completion: {
                 (value: Bool) in
-                println(">>> Date Animation Complete")
+                //Date Animation Complete
             }
         )
     }
@@ -211,50 +199,58 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let url = NSURL(string: "http://desolate-beach-1823.herokuapp.com/")
         let request = NSURLRequest(URL: url!)
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
-            
             //If there is an error, make a popup
             if (error != nil){
-                println(error)
-                var alert = UIAlertController(title: "Error", message: "Contact A Developer", preferredStyle: UIAlertControllerStyle.Alert)
-                self.presentViewController(alert, animated: true, completion: nil)
-            }
-            
-            //Get data from server as string
-            var data:String = NSString(data: data, encoding: NSUTF8StringEncoding)!
-            
-            //Make that data an array
-            var dataAsArray:[String] = data.componentsSeparatedByString("-");
-            
-            //Get class list from stored data
-            var cdata: String = String(NSUserDefaults.standardUserDefaults().objectForKey("classlist")! as String)
-            
-            //Parse the classlist
-            var classArray = self.JSONParseArray(cdata)
-            
-            //Basically just references both arrays and overrites one of them to what the displayed table should say
-            for (var i = 0; i < dataAsArray.count; i++) {
-                if (dataAsArray[i] != "H" && dataAsArray[i] != "A" && dataAsArray[i] != "E"){
-                    if (classArray[dataAsArray[i].toInt()! - 1] as NSString != ""){
-                        dataAsArray[i] = "\(classArray[dataAsArray[i].toInt()! - 1])"
+                self.DispError(error)
+                self.Title.topItem?.title = "Error Loading Data";
+                self.myList = ["Error"]
+                self.tableView.reloadData()
+            } else {
+                
+                //Get data from server as string
+                var data:String = NSString(data: data, encoding: NSUTF8StringEncoding)!
+                
+                //Make that data an array
+                var dataAsArray:[String] = data.componentsSeparatedByString("-");
+                
+                //Get class list from stored data
+                var cdata: String = String(NSUserDefaults.standardUserDefaults().objectForKey("classlist")! as String)
+                
+                //Parse the classlist
+                var classArray = self.JSONParseArray(cdata)
+                
+                //Basically just references both arrays and overrites one of them to what the displayed table should say
+                for (var i = 0; i < dataAsArray.count; i++) {
+                    if (dataAsArray.count > 1){
+                        println(dataAsArray)
+                        println(dataAsArray.count)
+                        if (dataAsArray[i] != "H" && dataAsArray[i] != "A" && dataAsArray[i] != "E"){
+                            if (classArray[dataAsArray[i].toInt()! - 1] as NSString != ""){
+                                dataAsArray[i] = "\(classArray[dataAsArray[i].toInt()! - 1])"
+                            } else {
+                                dataAsArray[i] = "Period \(dataAsArray[i])"
+                            }
+                        }
+                        if (dataAsArray[i] == "H"){
+                            dataAsArray[i] = "Homeroom"
+                            
+                        }
+                        //Set title
+                        self.Title.topItem?.title = data;
                     } else {
-                        dataAsArray[i] = "Period \(dataAsArray[i])"
+                        dataAsArray = ["No Classes"]
+                        self.Title.topItem?.title = "No Classes";
                     }
-                }
-                if (dataAsArray[i] == "H"){
-                    dataAsArray[i] = "Homeroom"
+                    
                 }
                 
+                //Set list to the one we were messing with in this part of the code
+                self.myList = dataAsArray;
+                
+                //Tell the table to refresh with the new data we got
+                self.tableView.reloadData();
             }
-            
-            //Set list to the one we were messing with in this part of the code
-            self.myList = dataAsArray;
-            
-            //Tell the table to refresh with the new data we got
-            self.tableView.reloadData();
-            
-            //Set title
-            self.Title.topItem?.title = data;
-            
+                
             self.refreshControl.endRefreshing()
         }
     }
@@ -337,5 +333,59 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return [AnyObject]()
     }
     
+    //------------//
+    //Mail and Error Handling Stuffs
+    
+    func DispError(error:NSError){
+        println("[ERROR!!!]: \(error.description)")
+        var eMessage = "Error Message: \"";
+        eMessage += error.localizedDescription
+        eMessage += "\". If you need help, send an email."
+        var alert = UIAlertController(title: "Error", message: eMessage, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel, handler: {UIAlertAction in
+            //Dismiss Error
+        }))
+        alert.addAction(UIAlertAction(title: "Email", style: UIAlertActionStyle.Default, handler: {UIAlertAction in
+            self.mailError(error.description)
+        }))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func mailError(error:String){
+        sendMail("<strong>Name:</strong> <em>(Enter your name here)</em><br /><br /><strong>Date:</strong> \(NSDate())<br /><br /><strong>Comments:</strong> Leave Comments Here<br /><br /><strong>Full Error:<br /></strong><div style=\"font-size:8px; border:1px solid #000; margin:20px;\">&quot;\(error)&quot;</div>")
+    }
+    
+    
+    func sendMail(body:String) {
+        let mailComposeViewController = configuredMailComposeViewController(body)
+        if MFMailComposeViewController.canSendMail() {
+            self.presentViewController(mailComposeViewController, animated: true, completion: nil)
+        } else {
+            self.showSendMailErrorAlert()
+        }
+    }
+    
+    func configuredMailComposeViewController(body:String) -> MFMailComposeViewController {
+        let mailComposerVC = MFMailComposeViewController()
+        mailComposerVC.mailComposeDelegate = self // Extremely important to set the --mailComposeDelegate-- property, NOT the --delegate-- property
+        mailComposerVC.delegate = self.navigationController?.delegate
+        
+        mailComposerVC.setEditing(true, animated: true)
+        mailComposerVC.setToRecipients(["ryan.johnson17@bcp.org"])
+        mailComposerVC.setSubject("BCP Schedule Error \(NSDate())")
+        mailComposerVC.setMessageBody(body, isHTML: true)
+        
+        return mailComposerVC
+    }
+    
+    func showSendMailErrorAlert() {
+        let sendMailErrorAlert = UIAlertView(title: "Could Not Send Email", message: "Your device could not send e-mail.  Please check e-mail configuration and try again.", delegate: self, cancelButtonTitle: "OK")
+        sendMailErrorAlert.show()
+    }
+    
+    // MARK: MFMailComposeViewControllerDelegate Method
+    func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
+        controller.dismissViewControllerAnimated(true, completion: nil)
+    }
 }
 
