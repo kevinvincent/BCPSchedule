@@ -274,25 +274,27 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func SwipeAction(sender: AnyObject) {
         var dur:NSTimeInterval = 0.2;
         
+        var width = self.view.frame.size.width;
+        var height = self.view.frame.size.height;
         
         var recognizer:UISwipeGestureRecognizer = sender as UISwipeGestureRecognizer
         if (recognizer.direction.rawValue == 1){
             //forward swipe, go back
             println("go back")
             UIView.animateWithDuration(dur, delay: 0, options: .CurveEaseOut, animations: {
-                self.dateLabel.frame = CGRectOffset(self.dateLabel.frame, 320.0, 0.0)
-                self.weekDayLabel.frame = CGRectOffset(self.weekDayLabel.frame, 320.0, 0.0)
-                self.TodayButton.frame = CGRectOffset(self.TodayButton.frame, 320.0, 0.0)
+                self.dateLabel.frame = CGRectOffset(self.dateLabel.frame, width, 0.0)
+                self.weekDayLabel.frame = CGRectOffset(self.weekDayLabel.frame, width, 0.0)
+                self.TodayButton.frame = CGRectOffset(self.TodayButton.frame, width, 0.0)
                 }, completion: { finished in
                     self.dayOffset-=1
                     self.refresh("derp")
-                    self.dateLabel.frame = CGRectOffset(self.dateLabel.frame, -640.0, 0.0)
-                    self.weekDayLabel.frame = CGRectOffset(self.weekDayLabel.frame, -640.0, 0.0)
-                    self.TodayButton.frame = CGRectOffset(self.TodayButton.frame, -640.0, 0.0)
+                    self.dateLabel.frame = CGRectOffset(self.dateLabel.frame, -2*width, 0.0)
+                    self.weekDayLabel.frame = CGRectOffset(self.weekDayLabel.frame, -2*width, 0.0)
+                    self.TodayButton.frame = CGRectOffset(self.TodayButton.frame, -2*width, 0.0)
                     UIView.animateWithDuration(dur, delay: 0, options: .CurveEaseOut, animations: {
-                        self.dateLabel.frame = CGRectOffset(self.dateLabel.frame, 320.0, 0.0)
-                        self.weekDayLabel.frame = CGRectOffset(self.weekDayLabel.frame, 320.0, 0.0)
-                        self.TodayButton.frame = CGRectOffset(self.TodayButton.frame, 320.0, 0.0)
+                        self.dateLabel.frame = CGRectOffset(self.dateLabel.frame, width, 0.0)
+                        self.weekDayLabel.frame = CGRectOffset(self.weekDayLabel.frame, width, 0.0)
+                        self.TodayButton.frame = CGRectOffset(self.TodayButton.frame, width, 0.0)
                         }, completion: { finished in
                             println("done with swipe")
                     })
@@ -302,19 +304,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             //backward swipe go forward
             println("go forward")
             UIView.animateWithDuration(dur, delay: 0, options: .CurveEaseOut, animations: {
-                self.dateLabel.frame = CGRectOffset(self.dateLabel.frame, -320.0, 0.0)
-                self.weekDayLabel.frame = CGRectOffset(self.weekDayLabel.frame, -320.0, 0.0)
-                self.TodayButton.frame = CGRectOffset(self.TodayButton.frame, -320.0, 0.0)
+                self.dateLabel.frame = CGRectOffset(self.dateLabel.frame, -width, 0.0)
+                self.weekDayLabel.frame = CGRectOffset(self.weekDayLabel.frame, -width, 0.0)
+                self.TodayButton.frame = CGRectOffset(self.TodayButton.frame, -width, 0.0)
                 }, completion: { finished in
                     self.dayOffset+=1
                     self.refresh("derp")
-                    self.dateLabel.frame = CGRectOffset(self.dateLabel.frame, 640.0, 0.0)
-                    self.weekDayLabel.frame = CGRectOffset(self.weekDayLabel.frame, 640.0, 0.0)
-                    self.TodayButton.frame = CGRectOffset(self.TodayButton.frame, 640.0, 0.0)
+                    self.dateLabel.frame = CGRectOffset(self.dateLabel.frame, 2*width, 0.0)
+                    self.weekDayLabel.frame = CGRectOffset(self.weekDayLabel.frame, 2*width, 0.0)
+                    self.TodayButton.frame = CGRectOffset(self.TodayButton.frame, 2*width, 0.0)
                     UIView.animateWithDuration(dur, delay: 0, options: .CurveEaseOut, animations: {
-                        self.dateLabel.frame = CGRectOffset(self.dateLabel.frame, -320.0, 0.0)
-                        self.weekDayLabel.frame = CGRectOffset(self.weekDayLabel.frame, -320.0, 0.0)
-                        self.TodayButton.frame = CGRectOffset(self.TodayButton.frame, -320.0, 0.0)
+                        self.dateLabel.frame = CGRectOffset(self.dateLabel.frame, -width, 0.0)
+                        self.weekDayLabel.frame = CGRectOffset(self.weekDayLabel.frame, -width, 0.0)
+                        self.TodayButton.frame = CGRectOffset(self.TodayButton.frame, -width, 0.0)
                         }, completion: { finished in
                             println("done with swipe")
                     })
