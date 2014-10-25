@@ -27,6 +27,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var Title: UINavigationBar!
     @IBOutlet var SwipeRecognizer: UISwipeGestureRecognizer!
     @IBOutlet var LSwipeRecognizer: UISwipeGestureRecognizer!
+    @IBOutlet weak var Image: UIImageView!
     //class list
     var myList:[String] = ["Loading..."];
     
@@ -57,6 +58,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     override func viewWillAppear(animated: Bool) {
+        
         //---------------------------------------------------//
         //Responsive Layouting Based on Different IOS Devices//
         //---------------------------------------------------//
@@ -272,7 +274,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     func SwipeAction(sender: AnyObject) {
-        var dur:NSTimeInterval = 0.2;
+        var dur:NSTimeInterval = NSTimeInterval(Double(view.frame.width)/2000.00);
         
         var width = self.view.frame.size.width;
         var height = self.view.frame.size.height;

@@ -105,6 +105,7 @@
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="Image" destination="pUE-Q2-9DB" id="F5E-Jj-axY"/>
                         <outlet property="LSwipeRecognizer" destination="e7C-Rc-ODn" id="hWh-wG-xSl"/>
                         <outlet property="SwipeRecognizer" destination="UzF-M8-YdF" id="kzJ-6I-Z4R"/>
                         <outlet property="Title" destination="kNT-zH-kkF" id="weQ-Kk-bCO"/>
