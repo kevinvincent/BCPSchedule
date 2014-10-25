@@ -57,6 +57,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     override func viewWillAppear(animated: Bool) {
+        //---------------------------------------------------//
+        //Responsive Layouting Based on Different IOS Devices//
+        //---------------------------------------------------//
+        var width = self.view.frame.size.width;
+        var height = self.view.frame.size.height;
+        
+        //Set title width to screen width
+        //Title.frame.size.width = width
+        
+        //Set img width to screen width
+        
+        
+        
         println(NSUserDefaults.standardUserDefaults().objectForKey("classlist"))
         
         //Uncomment next line to clear user data
